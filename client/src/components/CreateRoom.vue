@@ -5,7 +5,7 @@
         <div class="card">
           <div class="card-header">
             <div>
-              <h4>Cread Room</h4>
+              <h4>Create Room</h4>
             </div>
             <div class="form-group name-room">
               <input type="text" class="form-control" />

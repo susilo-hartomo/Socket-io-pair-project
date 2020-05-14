@@ -5,6 +5,7 @@
         <div class="card">
           <div class="card-header">
             <h6>Room Name</h6>
+            <button class="btn btn-primary">Join</button>
           </div>
           <div class="card-body">
             <p>Name</p>

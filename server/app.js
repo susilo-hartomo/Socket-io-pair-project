@@ -1,52 +1,48 @@
 const express = require("express");
 const app = express()
 const Http = require("http").Server(app);
-const Socketio = require("socket.io")(Http);
+const sock = require("socket.io")(Http);
 
 const position = {
     x: 0,
     y: 0
 };
 
-Socketio.on("connection", socket => {
-    console.log('user connection');
+let users = []
+let rooms = ['lobby'].concat(Object.keys(sock.adapter.rooms)[1])
 
-    // socket.emit("position", position);
+sock.on("connection", socket => {
+    console.log('user connected');
 
-    // socket.on('join room', room => {
-    //     socket.join(room)
-    // })
+    socket.on('disconnect', () => {
+        console.log('User disconnected')
+    })
 
-    // socket.on('move', data => {
-    //     const {room, move} = data;
-    //     socket.to(room).emit('move', {
-    //         move,
-    //         'name': 'same_one'
-    //     })
-    // })
+    socket.on('newPlayer', player => {
+        socket.username = player;
+        users.push(socket.username)
+        socket.emit('currentPlayers', users)
+    })
 
-    // socket.on("move", ({ room, data }) => {
-    //     socket.on(room).emit('data', (data, name) => {
-    //         switch (data) {
-    //             case "left":
-    //                 position.x -= 5;
-    //                 Socketio.emit("position", position);
-    //                 break;
-    //             case "right":
-    //                 position.x += 5;
-    //                 Socketio.emit("position", position);
-    //                 break;
-    //             case "up":
-    //                 position.y -= 5;
-    //                 Socketio.emit("position", position);
-    //                 break;
-    //             case "down":
-    //                 position.y += 5;
-    //                 Socketio.emit("position", position);
-    //                 break;
-    //         }
-    //     })
-    // });
+    socket.on('getPlayers', players => {
+        socket.emit('currentPlayers', players)
+    })
+
+    socket.on('createRoom', room => {
+        if (socket.room) 
+            socket.leave(socket.room);
+
+        socket.room = room;
+        rooms.push(socket.room);
+        socket.join(room);
+        socket.emit('availableRooms', rooms)
+    })
+
+    socket.on('joiningRoom', room => {
+        socket.join(room);
+        socket.broadcast.to(room).emit('notice', `User ${socket.username} has joined the ${room}`)
+    })
+
 });
 
 Http.listen(3000, () => {

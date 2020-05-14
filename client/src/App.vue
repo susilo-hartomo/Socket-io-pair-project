@@ -3,6 +3,7 @@
     <Welcome v-if="welcome" />
     <BlockGame v-if="blockGame" />
     <CreateRoom v-if="createRoom" />
+    <TrackFrog v-if="trackFrog"/>
   </div>
 </template>
 
@@ -10,18 +11,21 @@
 import Welcome from "./components/Welcome";
 import BlockGame from "./components/BlockGame.vue";
 import CreateRoom from './components/CreateRoom';
+import TrackFrog from './components/TrackFrog';
 
 export default {
   name: "App",
   data: () => ({
     welcome: false,
     blockGame: false,
-    createRoom: true,
+    createRoom: false,
+    trackFrog: true
   }),
   components: {
     BlockGame,
     Welcome,
-    CreateRoom
+    CreateRoom,
+    TrackFrog,
   }
 };
 </script>

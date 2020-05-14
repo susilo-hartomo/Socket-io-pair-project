@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <BlockGame/>
-    <ButtonMove/>
   </div>
 </template>
 
@@ -11,7 +10,7 @@ import BlockGame from "./components/BlockGame.vue";
 export default {
   name: "App",
   components: {
-    BlockGame
+    BlockGame,
   },
  
 };

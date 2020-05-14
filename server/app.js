@@ -9,7 +9,7 @@ const position = {
 };
 
 let users = []
-let rooms = ['lobby'].concat(Object.keys(sock.adapter.rooms)[1])
+let rooms = ['lobby']
 
 const diceRoll = () => {
     return Math.floor(Math.random() * 6) + 1;
@@ -40,6 +40,10 @@ sock.on("connection", socket => {
 
     socket.on('getPlayers', players => {
         sock.emit('currentPlayers', players)
+    })
+
+    socket.on('availableRooms', () => {
+        sock.emit('availableRooms', Object.keys(sock.adapter.rooms)[1])
     })
 
     socket.on('createRoom', room => {

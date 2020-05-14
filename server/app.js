@@ -11,8 +11,22 @@ const position = {
 let users = []
 let rooms = ['lobby'].concat(Object.keys(sock.adapter.rooms)[1])
 
+const diceRoll = () => {
+    return Math.floor(Math.random() * 6) + 1;
+}
+
 sock.on("connection", socket => {
     console.log('user connected');
+
+    socket.on('move', data => {
+
+        sock.emit('playerPos', position)
+
+        switch (data) {
+            case 'left': position.x -= 5; sock.emit('playerPos', position); break;
+            case 'right': position.y += 5; sock.emit('playerPos', position); break;
+        }
+    })
 
     socket.on('disconnect', () => {
         console.log('User disconnected')
@@ -21,11 +35,11 @@ sock.on("connection", socket => {
     socket.on('newPlayer', player => {
         socket.username = player;
         users.push(socket.username)
-        socket.emit('currentPlayers', users)
+        sock.emit('currentPlayers', users)
     })
 
     socket.on('getPlayers', players => {
-        socket.emit('currentPlayers', players)
+        sock.emit('currentPlayers', players)
     })
 
     socket.on('createRoom', room => {
@@ -42,6 +56,7 @@ sock.on("connection", socket => {
         socket.join(room);
         socket.broadcast.to(room).emit('notice', `User ${socket.username} has joined the ${room}`)
     })
+
 
 });
 

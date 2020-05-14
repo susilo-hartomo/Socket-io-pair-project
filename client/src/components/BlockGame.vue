@@ -33,7 +33,7 @@ export default {
   },
   mounted() {
     this.context = this.$refs.game.getContext("2d");
-    this.socket.on("position", data => {
+    this.socket.on("playerPos", data => {
       this.position = data;
       this.context.clearRect(
         0,

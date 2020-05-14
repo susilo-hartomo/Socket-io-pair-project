@@ -11,7 +11,8 @@
 </template>
 
 <script>
-import io from "socket.io-client";
+import socket from "../config/sockerIo";
+
 export default {
   name: "BlockGame",
   data() {
@@ -24,12 +25,10 @@ export default {
       }
     };
   },
-  created() {
-    this.socket = io("http://localhost:3000");
-  },
+  created() {},
   methods: {
     move(direction) {
-      this.socket.emit("move", direction);
+      socket.emit("move", direction);
     }
   },
   mounted() {

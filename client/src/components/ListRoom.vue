@@ -1,11 +1,11 @@
 <template>
   <div id="selectRoom">
     <div class="row">
-      <div class="col-4">
+      <div class="col-3">
         <div class="card">
           <div class="card-header">
             <h6>Room Name</h6>
-            <button class="btn btn-primary">Join</button>
+            <button class="btn btn-primary ml-2">Join</button>
           </div>
           <div class="card-body">
             <p>Name</p>

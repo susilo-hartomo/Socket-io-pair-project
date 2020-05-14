@@ -1,22 +1,20 @@
 <template>
   <div id="room">
-    <div class="size-card">
-      <div class="postion">
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <h4>Cread Room</h4>
-            </div>
-            <div class="form-group name-room">
-              <input type="text" class="form-control" />
-              <a href="#" class="btn btn-primary ml-2">Create</a>
-            </div>
+    <div class="postion">
+      <div class="card colorr" style="width: 700px">
+        <div class="card-header">
+          <div>
+            <h4 class="text-light">Cread Room</h4>
           </div>
-          <div class="card-body">
-            <h5 class="card-title mb-3">List Room</h5>
-            <div class="list-room">
-              <ListRoom/>
-            </div>
+          <div class="form-group name-room">
+            <input type="text" class="form-control" />
+            <a href="#" class="btn btn-primary ml-2">Create</a>
+          </div>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title mb-3 text-light">List Room</h5>
+          <div class="list-room">
+            <ListRoom style="witdh: 40px" />
           </div>
         </div>
       </div>
@@ -25,15 +23,15 @@
 </template>
 
 <script>
-import ListRoom from './ListRoom';
+import ListRoom from "./ListRoom";
 export default {
-  name: 'CreateRoom',
+  name: "CreateRoom",
   data: () => ({
-    key: 'value'
+    key: "value"
   }),
   components: {
-    ListRoom,
-  },
+    ListRoom
+  }
 };
 </script>
 
@@ -44,18 +42,22 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-
 }
 
 .postion {
   margin: auto;
 }
 
-.size-card {
-  width: 50%;
-  display: flexbox;
+.colorr{
+  background-color: black;
+  opacity: 0.8;
+}
+
+.card {
+  display: flex;
   justify-content: center;
 }
+
 .card-header {
   display: flex;
   justify-content: space-between;
@@ -69,7 +71,11 @@ export default {
 
 .list-room {
   width: 100%;
-  height: 220px;
+  height: 250px;
   overflow: auto;
+}
+
+listRoom {
+  width: 70px;
 }
 </style>

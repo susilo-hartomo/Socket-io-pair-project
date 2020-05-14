@@ -44,7 +44,7 @@ export default {
       );
       this.context.fillStyle = "#FFFFFF";
       this.context.fillRect(0, 0, this.$refs.game.width, this.$refs.game.width);
-      this.context.fillStyle = "#000000";
+      this.context.fillStyle = "violet";
       this.context.fillRect(this.position.x, this.position.y, 20, 20);
     });
   }

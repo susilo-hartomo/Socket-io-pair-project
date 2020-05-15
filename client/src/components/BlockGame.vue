@@ -2,11 +2,11 @@
   <div class="container" style='text-align:center;'>
     <canvas ref="game" width="1000" height="400" style="border: 1px solid black; background-image:url(https://i.imgur.com/HN5iah7.jpg);"></canvas>
       <div class="wrapper">
-        <!-- <button v-if="!resetGame && !jalan" v-on:click="move('randomone')" class="cta" href="#">
-          <span>KOCOK</span> 
-         </button> -->
-          <button v-on:click="move('randomTwo')" class="cta" href="#">
-          <span>DADU</span> 
+        <button v-if="!resetGame && !jalan && satu" v-on:click="move('randomone')" class="cta" href="#">
+          <span>Player1</span> 
+         </button>
+          <button v-if="!resetGame && !jalan && dua" v-on:click="move('randomTwo')" class="cta" href="#">
+          <span>PLayer2</span> 
          </button>
         <button v-if="resetGame" v-on:click="reset" class="cta" href="#">
           <span>ResetGame</span> 
@@ -41,18 +41,40 @@ export default {
       winner: '',
       win: false,
       resetGame: false,
-      jalan: false
+      jalan: false,
+      satu: false,
+      dua: false,
+      counter: 0,
+      user1: '',
+      user2: ''
     };
   },
   created() {
     this.socket = io("http://localhost:3000");
+    this.socket.emit('playerIn', localStorage.getItem('currentUser'))
+    
     
   }, mounted() {
-
-
     this.context = this.$refs.game.getContext("2d");
+    console.log('masuk mounted line 53')
+
+   this.socket.on('playerList', data=>{
+   
+     console.log(data)
+     console.log('========================',localStorage.getItem('currentUser'))
+    this.user1 = data[0]
+    this.user2 = data[1]
+    if(localStorage.currentUser == this.user1){
+      this.satu = true;
+      this.dua = false
+    }else{
+      this.satu = false;
+      this.dua = true
+    }
+   })
+
     this.socket.on("positionOne", data => {
-      console.log('massuk player one')
+      console.log('massuk player one', data)
       this.playerOne = data;
       if(this.playerOne.x > 900){
          this.win = true;
@@ -60,49 +82,66 @@ export default {
          this.playerTwo.x = 0
          this.resetGame = true;
          this.context.fillText('\uf52e',this.playerTwo.x, this.playerTwo.y);
-          this.socket.emit('pesan', 'kamu kalah player 2')
+          // this.socket.emit('pesan', 'kamu kalah player 2')
          
-        //  this.winner = `>>>>>>>>>> PLayer ONE is the winner <<<<<<<<<<<`;
+         this.winner = `>>>>>>>>>> PLayer ONE is the winner <<<<<<<<<<<`;
        
       }
     this.context.font = '900 75px "Font Awesome 5 Free"'
-      this.context.clearRect(0, 0, this.$refs.game.width, this.$refs.game.height);
+     this.context.clearRect(0, 0, this.$refs.game.width, this.$refs.game.height);
      
      this.context.fillText('\uf52e',this.playerOne.x, this.playerOne.y);
+
+     if(this.playerTwo.y !== 0){
+
+       this.context.fillText('\uf52e',this.playerTwo.x, this.playerTwo.y);
+     }
+
+   
     
     });
 
     this.socket.on('positionTwo', data =>{
-      console.log('masukplayer two')
+      console.log('masukplayer two', data)
        this.playerTwo = data;
       if(this.playerTwo.x > 900){
          this.win = true;
          this.playerTwo.x = 0
         this.playerOne.x = 0
         this.resetGame = true;
-        // this.winner = `>>>>>>>>>> PLayer TWO is the winner <<<<<<<<<<<`;
+         this.winner = `>>>>>>>>>> PLayer TWO is the winner <<<<<<<<<<<`;
        
      
       }
     this.context.font = '900 75px "Font Awesome 5 Free"'
      
-      this.context.clearRect(0, 0, this.$refs.game.width, this.$refs.game.height);
+       this.context.clearRect(0, 0, this.$refs.game.width, this.$refs.game.height);
      this.context.fillText('\uf52e',this.playerTwo.x, this.playerTwo.y);
-   
+   this.context.fillText('\uf52e',this.playerOne.x, this.playerOne.y);
     })
 
-    this.socket.on('hasilPesan', data=>{
-      this.winner = data
-    })
+    // this.socket.on('hasilPesan', data=>{
+    //   this.winner = data
+    // })
   },
   methods: {
     move(direction) {
       console.log('masuk', direction)
       this.socket.emit("move", direction);
+      // if(this.counter === 0){
+      //   this.counter += 1;
+      //   this.satu = false;
+      //   this.dua = true
+      // }else{
+      //   this.counter -= 1
+      //    this.satu = true;
+      //   this.dua = false
+      // }
     },
     reset() {
       this.win = false;
       this.resetGame = false;
+      this.socket.emit('reset')
       
     },
     logout(){

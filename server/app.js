@@ -12,9 +12,39 @@ var positionTwo = {
   y: 200,
 }
 
+let players = []
+
 Socketio.on("connection", socket => {
-  socket.emit("positionOne", position);
-  socket.emit("positionTwo", positionTwo);
+  socket.on('playerIn', data=>{
+    if(players.length == 2){
+      players = [];
+    }
+    position = {
+      x: 0,
+      y: 300,
+    };
+
+    positionTwo = {
+      x: 0,
+      y: 200,
+    }
+    if(players.length === 0){
+
+      console.log('masuk ke app js line 21 emit');
+      socket.emit("positionOne", position);
+     players.push(data)
+     console.log('masuk app js player 1')
+
+    }else{
+      socket.emit("positionTwo", positionTwo);
+      players.push(data)
+      socket.broadcast.emit('positionTwo', positionTwo)
+      socket.emit('positionOne', position)
+      socket.emit('playerList', players)
+      socket.broadcast.emit('playerList', players)
+      console.log('masuk app js player 2')
+    }
+  })
   socket.on('move', data => {
     switch (data) {
       case "randomone":
@@ -43,8 +73,18 @@ Socketio.on("connection", socket => {
 
     }
   })
-  socket.on('pesan', data=>{
-    socket.broadcast.emit('hasilPesan', data)
+  socket.on('reset', data=>{
+    position = {
+      x: 0,
+      y: 300,
+    };
+
+    positionTwo = {
+      x: 0,
+      y: 200,
+    }
+  Socketio.emit('positionOne', position)
+  Socketio.emit('positionTwo', positionTwo)
   })
 
 })

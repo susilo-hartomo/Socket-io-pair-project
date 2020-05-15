@@ -1,27 +1,11 @@
 <template>
-  <!-- <div id="room">
-    <div style="position: fixed; z-index: -99; width: 100%; height: 100%">
-<iframe width="560" height="315" src="https://www.youtube.com/embed/0B8TaM752KA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </div>
-    <div class="position">
-      <div class="col-8 col-md-5">
-        <div class="card p-4">
-          <form v-on:submit.prevent="login">
-            <div class="form-group">
-              <input type="text" class="form-control" placeholder="Input your name and play" v-model="userName"/>
-            </div>
-            <button type="submit" class="btn btn-primary" style="width: 100%">Submit</button>
-          </form>
-        </div>
-        </div>
-      </div>
-  </div> -->
+  
 
   <div>
     <div id="card">
       <div id="card-content">
         <div id="card-title">
-          <h2>WANT A PLAY?</h2><br>
+          <h2>Input Your Name To Start The Game</h2><br>
           <form method="post" class="form">
           <label for="user-email" style="padding-top:13px">
             &nbsp;Username</label>
@@ -56,7 +40,7 @@ export default {
  },methods:{
    login(){
      localStorage.setItem('currentUser', this.userName)
-     this.$router.push({name: "CreateRoom"})
+     this.$router.push({name: "BlockGame"})
    }
  }
 };

@@ -24,6 +24,7 @@
 
 <script>
 import io from "socket.io-client";
+
 export default {
   name: "BlockGame",
   data() {

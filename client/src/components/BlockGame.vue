@@ -1,12 +1,24 @@
 <template>
-  <div>
-    <canvas ref="game" width="640" height="480" style="border: 1px solid black;"></canvas>
+  <div class="container" style='text-align:center;'>
+    <canvas ref="game" width="1000" height="400" style="border: 1px solid black; background-image:url(https://i.imgur.com/HN5iah7.jpg);"></canvas>
+      <div class="wrapper">
+        <!-- <button v-if="!resetGame && !jalan" v-on:click="move('randomone')" class="cta" href="#">
+          <span>KOCOK</span> 
+         </button> -->
+          <button v-on:click="move('randomTwo')" class="cta" href="#">
+          <span>DADU</span> 
+         </button>
+        <button v-if="resetGame" v-on:click="reset" class="cta" href="#">
+          <span>ResetGame</span> 
+         </button><br>
+         <button v-if="resetGame" v-on:click="logout" class="cta" href="#">
+          <span>LOGOUT</span> 
+         </button>
+      </div>
     <p>
-      <button v-on:click="move('right')">Right</button>
-      <button v-on:click="move('left')">Left</button>
-      <button v-on:click="move('up')">Up</button>
-      <button v-on:click="move('down')">Down</button>
+     
     </p>
+    <h1 v-if="win">{{winner}}</h1>
   </div>
 </template>
 
@@ -18,37 +30,145 @@ export default {
     return {
       socket: {},
       context: {},
-      position: {
+      playerOne: {
         x: 0,
         y: 0
-      }
+      },
+      playerTwo:{
+         x: 0,
+        y: 0
+      },
+      winner: '',
+      win: false,
+      resetGame: false,
+      jalan: false
     };
   },
   created() {
     this.socket = io("http://localhost:3000");
+    
+  }, mounted() {
+
+
+    this.context = this.$refs.game.getContext("2d");
+    this.socket.on("positionOne", data => {
+      console.log('massuk player one')
+      this.playerOne = data;
+      if(this.playerOne.x > 900){
+         this.win = true;
+         this.playerOne.x = 0
+         this.playerTwo.x = 0
+         this.resetGame = true;
+         this.context.fillText('\uf52e',this.playerTwo.x, this.playerTwo.y);
+          this.socket.emit('pesan', 'kamu kalah player 2')
+         
+        //  this.winner = `>>>>>>>>>> PLayer ONE is the winner <<<<<<<<<<<`;
+       
+      }
+    this.context.font = '900 75px "Font Awesome 5 Free"'
+      this.context.clearRect(0, 0, this.$refs.game.width, this.$refs.game.height);
+     
+     this.context.fillText('\uf52e',this.playerOne.x, this.playerOne.y);
+    
+    });
+
+    this.socket.on('positionTwo', data =>{
+      console.log('masukplayer two')
+       this.playerTwo = data;
+      if(this.playerTwo.x > 900){
+         this.win = true;
+         this.playerTwo.x = 0
+        this.playerOne.x = 0
+        this.resetGame = true;
+        // this.winner = `>>>>>>>>>> PLayer TWO is the winner <<<<<<<<<<<`;
+       
+     
+      }
+    this.context.font = '900 75px "Font Awesome 5 Free"'
+     
+      this.context.clearRect(0, 0, this.$refs.game.width, this.$refs.game.height);
+     this.context.fillText('\uf52e',this.playerTwo.x, this.playerTwo.y);
+   
+    })
+
+    this.socket.on('hasilPesan', data=>{
+      this.winner = data
+    })
   },
   methods: {
     move(direction) {
+      console.log('masuk', direction)
       this.socket.emit("move", direction);
+    },
+    reset() {
+      this.win = false;
+      this.resetGame = false;
+      
+    },
+    logout(){
+      localStorage.clear()
+      this.$router.push('/')
+    },
+    playerSatu(){
+      this.jalan = false
     }
   },
-  mounted() {
-    this.context = this.$refs.game.getContext("2d");
-    this.socket.on("position", data => {
-      this.position = data;
-      this.context.clearRect(
-        0,
-        0,
-        this.$refs.game.width,
-        this.$refs.game.height
-      );
-      this.context.fillStyle = "#FFFFFF";
-      this.context.fillRect(0, 0, this.$refs.game.width, this.$refs.game.width);
-      this.context.fillStyle = "#000000";
-      this.context.fillRect(this.position.x, this.position.y, 20, 20);
-    });
-  }
+ 
 };
 </script>
 
-<style scoped></style>
+<style scoped>  
+canvas{
+  font-family: "Font Awesome 5 Free";
+  content: "\f005";
+  font-weight: 900;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.cta {
+    display: flex;
+    padding: 10px 45px;
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 40px;
+    color: white;
+    background: #6225E6;
+    transition: 1s;
+    box-shadow: 6px 6px 0 black;
+    transform: skewX(-15deg);
+}
+
+.cta:focus {
+   outline: none; 
+}
+
+.cta:hover {
+    transition: 0.5s;
+    box-shadow: 10px 10px 0 #FBC638;
+}
+
+.cta span:nth-child(2) {
+    transition: 0.5s;
+    margin-right: 0px;
+}
+
+.cta:hover  span:nth-child(2) {
+    transition: 0.5s;
+    margin-right: 45px;
+}
+
+  span {
+    transform: skewX(15deg) 
+  }
+
+  span:nth-child(2) {
+    width: 20px;
+    margin-left: 30px;
+    position: relative;
+    top: 12%;
+  }
+  </style>

@@ -1,7 +1,8 @@
+require('dotenv').config();
 const express = require('express')();
 const Http = require('http').createServer(express);
 const Socketio = require('socket.io')(Http);
-const port = 3000;
+const port = process.env.PORT || 3001;
 var position = {
   x: 0,
   y: 300,

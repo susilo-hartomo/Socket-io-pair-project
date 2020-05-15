@@ -85,6 +85,7 @@ Socketio.on("connection", socket => {
     }
   Socketio.emit('positionOne', position)
   Socketio.emit('positionTwo', positionTwo)
+  Socketio.emit('mulaiDariAwal')
   })
 
 })

@@ -6,7 +6,7 @@
           <span>Player1</span> 
          </button>
           <button v-if="!resetGame && !jalan && dua" v-on:click="move('randomTwo')" class="cta" href="#">
-          <span>PLayer2</span> 
+          <span>Player2</span> 
          </button>
         <button v-if="resetGame" v-on:click="reset" class="cta" href="#">
           <span>ResetGame</span> 
@@ -58,6 +58,12 @@ export default {
   }, mounted() {
     this.context = this.$refs.game.getContext("2d");
     console.log('masuk mounted line 53')
+
+this.socket.on('mulaiDariAwal', data=>{
+  this.resetGame = false;
+  this.logout = false;
+  this.win = false;
+})
 
    this.socket.on('playerList', data=>{
    
@@ -142,6 +148,7 @@ export default {
     reset() {
       this.win = false;
       this.resetGame = false;
+     
       this.socket.emit('reset')
       
     },

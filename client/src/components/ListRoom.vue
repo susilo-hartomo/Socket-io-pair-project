@@ -5,7 +5,7 @@
         <div class="card">
           <div class="card-header">
             <h6>Room Name</h6>
-            <button class="btn btn-primary ml-2">Join</button>
+            <button v-on:click="main()" class="btn btn-primary ml-2">Join</button>
           </div>
           <div class="card-body">
             <p>Name</p>
@@ -18,7 +18,16 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name : "ListRoom",
+  methods:{
+    main(){
+      console.log('masuk main');
+      this.$router.push({name: "BlockGame"})
+    }
+  }
+};
+
 </script>
 
 <style>
